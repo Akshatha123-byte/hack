@@ -7,7 +7,7 @@ Parts A, B, C, and D of the P2 scenario are implemented with the paper's MERN st
 - MongoDB with Mongoose
 - DFA and equivalent regular-expression validation
 - Deterministic classification, routing, capacity checks, escalation, and status tracking
-- Four helpdesk teams, each capped at 8 open tickets, with Level-2 escalation
+- Zones 1–4 each handle two issue types; Zone 5 handles Level-2 escalation for all issue types
 - Deterministic priority ordering, high-priority override, duplicate prevention, and status history
 
 ## Run locally
@@ -22,7 +22,7 @@ When `MONGO_URI` is omitted, the API uses a clearly labelled in-memory developme
 
 ## Test
 
-`npm test` runs the documented Part D suite (26 tests). `npm run build` validates the production frontend build.
+`npm test` runs the documented Part D suite (28 tests). `npm run build` validates the production frontend build.
 
 ## API
 

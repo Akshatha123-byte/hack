@@ -1,4 +1,4 @@
-const IDENTIFIER_PATTERN = /^DEPT[A-Z]{2}-ISSUE\d{3}-(H|M|L)$/;
+const IDENTIFIER_PATTERN = /^DEPT[A-Z]{2}-ISSUE\d{3}-PRIORITY[HML]$/;
 
 export const identifierRegex = IDENTIFIER_PATTERN;
 
@@ -20,11 +20,19 @@ export function validateWithDfa(identifier) {
     else if (state === 11) state = char === "E" ? 12 : -1;
     else if (state >= 12 && state <= 14) state = /\d/.test(char) ? state + 1 : -1;
     else if (state === 15) state = char === "-" ? 16 : -1;
-    else if (state === 16) state = /[HML]/.test(char) ? 17 : -1;
+    else if (state === 16) state = char === "P" ? 17 : -1;
+    else if (state === 17) state = char === "R" ? 18 : -1;
+    else if (state === 18) state = char === "I" ? 19 : -1;
+    else if (state === 19) state = char === "O" ? 20 : -1;
+    else if (state === 20) state = char === "R" ? 21 : -1;
+    else if (state === 21) state = char === "I" ? 22 : -1;
+    else if (state === 22) state = char === "T" ? 23 : -1;
+    else if (state === 23) state = char === "Y" ? 24 : -1;
+    else if (state === 24) state = /[HML]/.test(char) ? 25 : -1;
     else state = -1;
     if (state === -1) break;
   }
-  return state === 17;
+  return state === 25;
 }
 
 export function validateIdentifier(identifier) {
@@ -36,7 +44,7 @@ export function validateIdentifier(identifier) {
     regexValid,
     reason: dfaValid && regexValid
       ? "Identifier matches the DFA and regular expression."
-      : "Use the format DEPT[2 uppercase letters]-ISSUE[3 digits]-PRIORITY, where priority is H, M, or L."
+      : "Use the format DEPT[2 uppercase letters]-ISSUE[3 digits]-PRIORITY[H/M/L], for example DEPTIT-ISSUE123-PRIORITYH."
   };
 }
 
@@ -49,6 +57,7 @@ export function validateReportInput(input) {
   if (!input?.department?.trim()) errors.push("Department is required.");
   if (!input?.description?.trim()) errors.push("Description is required.");
   if (!input?.userEmail?.trim() || !input.userEmail.includes("@")) errors.push("A valid user email is required.");
+  if (!/^\d{3}$/.test(input?.code ?? "")) errors.push("Issue code must contain exactly 3 digits.");
   if (!["H", "M", "L"].includes(identifier?.at(-1))) errors.push("Priority must be H, M, or L.");
   return { valid: errors.length === 0, errors, validation };
 }
